@@ -42,7 +42,7 @@ for i in range(n):
     Mc = 1.0*randint(10,250) # masa cuerpo
     d = 35 # densidad
     r = ((3.0*Mc)/(4*pi*d))**(1.0/3) # radio cuerpo
-    c = sphere(pos = vector(20*R,20 + random()*R*18,0), radius = r, color = colores[randint(0,4)], make_trail=False) # sol
+    c = sphere(pos = vector(20*R,20 + random()*R*18,0), radius = r, color = colores[randint(0,4)], make_trail=False) # cuerpo
     v0 = vector(s*randint(10,15),0,0) # velocidad inicial
     cuerpo = [c,v0,Mc]
     planetas.append(cuerpo)
