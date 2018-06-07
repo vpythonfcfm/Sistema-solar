@@ -3,6 +3,11 @@ from math import *
 from random import *
 import numpy as np
 
+def rotar_2d(vector_2d, phi):
+    mat_rot =np.array([[np.cos(phi), -np.sin(phi)],[np.sin(phi), np.cos(phi)]])
+    vec_rotado = np.matmul(mat_rot, vector_2d)
+    return vec_rotado
+
 ## Vectores unitarios ##
 x_i = arrow(pos=vector(0,0,0), axis=vector(1,0,0), color=color.red, shaftwidth=0.05)
 txt_x = text(text='x', pos=x_i.pos+x_i.axis, axis=x_i.axis, align='center', height=0.4,
@@ -69,15 +74,30 @@ def ag(ca,cb,ma,mb):
 n = 2 # numero de planetas
 planetas = []
 colores = [color.red,color.blue,color.green,color.yellow,color.orange]
-for i in range(n):
-    Mc = 1.0*randint(10,250) # masa cuerpo
-    d = 35 # densidad
-    r =  0.01 * au#((3.0*Mc)/(4*pi*d))**(1.0/3) # radio cuerpo
-    c = sphere(pos = vector(0,R*2,0), radius = r, color = colores[randint(0,4)], make_trail=True) # cuerpos
-    a = np.linalg.norm(ag(c,sol,Ms, Mc))
-    v0 = vector(sqrt(a*(dis(c,sol))),0,0) # velocidad inicial
-    cuerpo = [c,v0,Mc]
-    planetas.append(cuerpo)
+# DV
+Mc = 1.0*randint(10,250) # masa cuerpo
+d = 35 # densidad
+r =  0.03 * au#((3.0*Mc)/(4*pi*d))**(1.0/3) # radio cuerpo
+c = sphere(pos = vector(0,R*2,0), radius = r, color = colores[0], make_trail=True) # cuerpos
+a = np.linalg.norm(ag(c,sol,Ms, Mc))
+v0 = vector(sqrt(a*(dis(c,sol))),0,0) # velocidad inicial
+cuerpo = [c,v0,Mc]
+planetas.append(cuerpo)
+
+# Luke
+phi = 0.2 *  np.pi
+Mc = 1.0*randint(10,250) # masa cuerpo
+d = 35 # densidad
+pos_luke = rotar_2d(np.array([0, 2 * R]), phi)
+pos_luke = vector(pos_luke[0], pos_luke[1], 0)
+c = sphere(pos = pos_luke, radius = r, color = colores[1], make_trail=True) # cuerpos
+a = np.linalg.norm(ag(c,sol,Ms, Mc))
+v0 = sqrt(a*(dis(c,sol))) # velocidad inicial
+v0_luke = rotar_2d(np.array([v0, 0]), phi) * 0.965
+v0 = vector(v0_luke[0], v0_luke[1], 0)
+cuerpo = [c,v0,Mc]
+planetas.append(cuerpo)
+
 
 ##----------------##
 
@@ -85,12 +105,12 @@ for i in range(n):
 ## inicio de movimiento ##
 año = 365 * 24 * 3600
 t = 1000
-dt = año/2000
+dt = año/4000
 
 while True:
 
     rate(t)
-    
+
     for i in planetas:
         
         ## movimiento c
